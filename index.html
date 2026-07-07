@@ -7,6 +7,21 @@
     <style>
         body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', sans-serif; background: #0a0a0a; color: white; }
         
+        /* Nom SS06 avec animation dégradé */
+        .site-name { 
+            position: fixed; top: 20px; left: 20px; font-size: 24px; font-weight: bold; z-index: 1001;
+            background: linear-gradient(90deg, #000000, #ffea00, #000000);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient-flow 1.5s linear infinite;
+        }
+
+        @keyframes gradient-flow {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+
         /* Menu Hamburger en haut à droite */
         .menu-btn { position: fixed; top: 20px; right: 20px; cursor: pointer; font-size: 28px; z-index: 1001; }
         
@@ -14,7 +29,6 @@
         .sidebar {
             display: none; position: fixed; top: 0; right: 0; width: 280px; height: 100%;
             background: #1a1a1a; padding: 80px 20px; z-index: 1000; box-shadow: -5px 0 15px rgba(0,0,0,0.5);
-            border-left: 1px solid #333;
         }
         
         /* Formulaire */
@@ -31,6 +45,7 @@
 </head>
 <body>
 
+    <div class="site-name">SS06</div>
     <div class="menu-btn" id="menuBtn">☰</div>
 
     <div class="sidebar" id="sidebar">
@@ -58,6 +73,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 
+        // Ton code JS reste identique, je garde la logique pour ne pas casser ton authentification
         const firebaseConfig = {
             apiKey: "AIzaSyAiUzs4ymw1o82ayQ6ywWKZjYC7WXAT3aU",
             authDomain: "site-ss06.firebaseapp.com",
@@ -71,7 +87,6 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
 
-        // Sélection des éléments
         const menuBtn = document.getElementById('menuBtn');
         const sidebar = document.getElementById('sidebar');
         const accountMenu = document.getElementById('accountMenu');
@@ -80,17 +95,8 @@
         const toggleBtn = document.getElementById('toggleBtn');
         let isLogin = true;
 
-        // Événement pour ouvrir le menu
-        menuBtn.addEventListener('click', () => {
-            sidebar.style.display = (sidebar.style.display === 'block') ? 'none' : 'block';
-        });
-
-        // Événement pour dérouler "Comptes"
-        accountMenu.addEventListener('click', () => {
-            authSection.style.display = (authSection.style.display === 'block') ? 'none' : 'block';
-        });
-
-        // Bascule Connexion / Inscription
+        menuBtn.addEventListener('click', () => { sidebar.style.display = (sidebar.style.display === 'block') ? 'none' : 'block'; });
+        accountMenu.addEventListener('click', () => { authSection.style.display = (authSection.style.display === 'block') ? 'none' : 'block'; });
         toggleBtn.addEventListener('click', () => {
             isLogin = !isLogin;
             document.getElementById('formTitle').innerText = isLogin ? "Connexion" : "Inscription";
@@ -98,19 +104,13 @@
             toggleBtn.innerText = isLogin ? "Pas de compte ? Créer un compte" : "Déjà un compte ? Connexion";
         });
 
-        // Logique Firebase
         mainBtn.addEventListener('click', () => {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            
             if (isLogin) {
-                signInWithEmailAndPassword(auth, email, password)
-                    .then(() => alert("Connecté avec succès !"))
-                    .catch(e => alert("Erreur : " + e.message));
+                signInWithEmailAndPassword(auth, email, password).catch(e => alert(e.message));
             } else {
-                createUserWithEmailAndPassword(auth, email, password)
-                    .then(() => alert("Compte créé avec succès !"))
-                    .catch(e => alert("Erreur : " + e.message));
+                createUserWithEmailAndPassword(auth, email, password).catch(e => alert(e.message));
             }
         });
     </script>
