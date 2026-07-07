@@ -3,35 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SS06 - Site Principal</title>
+    <title>SS06 - Boutique</title>
     <style>
-        body, html { margin: 0; padding: 0; height: 100%; font-family: sans-serif; background: #fdfdfd; }
+        body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', sans-serif; background: #0a0a0a; color: white; }
         
         /* Onglet flottant en haut à DROITE */
         .tab-container {
             position: absolute; top: 10px; right: 10px; z-index: 1000;
-            background: white; padding: 15px; border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15); width: 250px;
+            background: #1a1a1a; padding: 15px; border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5); width: 250px; border: 1px solid #333;
         }
 
-        input { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-        button { width: 100%; padding: 10px; background: #FFFC00; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
-        .toggle-link { margin-top: 10px; font-size: 0.8rem; color: #555; cursor: pointer; text-decoration: underline; }
+        input { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #444; border-radius: 8px; background: #000; color: white; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background: #e50914; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; color: white; }
+        .toggle-link { margin-top: 10px; font-size: 0.8rem; color: #aaa; cursor: pointer; text-decoration: underline; }
+
+        /* Style Boutique */
+        .container { max-width: 800px; margin: 0 auto; padding: 100px 20px; text-align: center; }
+        .product-card { background: #111; padding: 20px; border-radius: 20px; border: 1px solid #333; }
+        .price { font-size: 1.5rem; color: #e50914; font-weight: bold; margin: 20px 0; }
+        .btn-cart { background: #8b0000; padding: 15px; width: 100%; border: none; border-radius: 10px; color: white; font-weight: bold; margin-top: 10px; }
 
         #homePage { 
             position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            display: none; text-align: center; background: white; padding: 40px; 
-            border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            opacity: 1; transition: opacity 0.5s ease;
+            display: none; text-align: center; background: #1a1a1a; padding: 40px; 
+            border-radius: 20px; opacity: 1; transition: opacity 0.5s ease;
         }
     </style>
 </head>
 <body>
-
-    <div style="padding: 100px 50px;">
-        <h1>Bienvenue sur SS06</h1>
-        <p>Contenu principal du site...</p>
-    </div>
 
     <div class="tab-container" id="authCard">
         <h4 id="formTitle" style="margin-top:0;">Connexion</h4>
@@ -40,6 +40,22 @@
         <input type="password" id="passwordConfirm" placeholder="Confirmer mot de passe" style="display:none;">
         <button id="mainBtn">Se connecter</button>
         <div class="toggle-link" id="toggleBtn">Pas de compte ? Créer un compte</div>
+    </div>
+
+    <div class="container">
+        <div class="product-card">
+            <h1>Nitro Boost 1 Month</h1>
+            <p>Accès Premium Discord - Livraison instantanée</p>
+            <div class="price">€2.55</div>
+            
+            <div style="margin-bottom: 20px;">
+                <label>Quantité : </label>
+                <input type="number" value="1" style="width: 60px; text-align: center;">
+            </div>
+            
+            <button class="btn-cart">Add to Cart 🛒</button>
+            <button class="btn-cart" style="background: #e50914;">Buy Now ➡️</button>
+        </div>
     </div>
 
     <div id="homePage">
