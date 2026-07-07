@@ -67,11 +67,14 @@
         const toggleBtn = document.getElementById('toggleBtn');
         const passConfirm = document.getElementById('passwordConfirm');
 
+        // Correction : le bouton change bien l'affichage du champ de confirmation
         toggleBtn.addEventListener('click', () => {
             isLogin = !isLogin;
             formTitle.innerText = isLogin ? "Connexion" : "Inscription";
             mainBtn.innerText = isLogin ? "Se connecter" : "Créer le compte";
             toggleBtn.innerText = isLogin ? "Pas de compte ? Créer un compte" : "Déjà un compte ? Connexion";
+            
+            // On force l'affichage en bloc si on est en mode inscription
             passConfirm.style.display = isLogin ? "none" : "block";
         });
 
