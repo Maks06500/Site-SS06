@@ -2,82 +2,70 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SS06 - Boutique</title>
+    <title>SS06</title>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <style>
-        body, html { margin: 0; padding: 0; height: 100%; background-color: #0a0a0a; color: white; font-family: sans-serif; overflow-x: hidden; }
-        
-        /* Fond animé en priorité absolue */
-        #particles-js { position: fixed; width: 100%; height: 100%; z-index: -10; top: 0; left: 0; }
-        
-        .main-content { position: relative; z-index: 1; }
-
-        /* Style SS06 */
-        .site-name { position: fixed; top: 20px; left: 20px; font-size: 24px; font-weight: bold; background: linear-gradient(90deg, #000000, #ffea00, #000000); -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: gradient-flow 0.8s linear infinite; }
-        @keyframes gradient-flow { 0% { background-position: 0% center; } 100% { background-position: 200% center; } }
-
-        .menu-btn { position: fixed; top: 20px; right: 20px; cursor: pointer; font-size: 28px; z-index: 100; }
-        .sidebar { display: none; position: fixed; top: 0; right: 0; width: 280px; height: 100%; background: rgba(0, 0, 0, 0.9); padding: 80px 20px; z-index: 99; }
-        
-        /* Auth */
-        .auth-section { display: none; margin-top: 20px; border: 1px solid #333; padding: 15px; border-radius: 10px; }
-        input { width: 100%; padding: 10px; margin: 5px 0; background: #111; color: white; border: 1px solid #444; border-radius: 5px; box-sizing: border-box; }
-        button { width: 100%; padding: 10px; background: #e50914; border: none; border-radius: 5px; color: white; cursor: pointer; }
+        body { margin: 0; background: #0a0a0a; color: white; font-family: sans-serif; overflow: hidden; }
+        #particles-js { position: fixed; width: 100%; height: 100%; z-index: -1; }
+        .menu-btn { position: fixed; top: 20px; right: 20px; cursor: pointer; font-size: 30px; z-index: 10; }
+        .sidebar { display: none; position: fixed; top: 0; right: 0; width: 250px; height: 100%; background: #1a1a1a; padding-top: 60px; z-index: 9; }
+        .auth-box { display: none; padding: 20px; border: 1px solid #333; margin: 10px; }
+        input { width: 90%; padding: 10px; margin: 5px; background: #000; color: white; border: 1px solid #444; }
+        button { width: 90%; padding: 10px; background: #e50914; color: white; border: none; margin: 5px; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <div id="particles-js"></div>
+    <div class="menu-btn" id="menuBtn">☰</div>
 
-    <div class="main-content">
-        <div class="site-name">SS06</div>
-        <div class="menu-btn" id="menuBtn">☰</div>
-
-        <div class="sidebar" id="sidebar">
-            <div id="accountMenu" style="cursor:pointer; font-weight:bold;">Comptes ▾</div>
-            <div class="auth-section" id="authSection">
-                <h4 id="formTitle">Connexion</h4>
-                <input type="email" id="email" placeholder="Email">
-                <input type="password" id="password" placeholder="Mot de passe">
-                <button id="mainBtn">Se connecter</button>
-                <p id="toggleBtn" style="font-size:12px; cursor:pointer; text-decoration:underline;">Pas de compte ? Créer</p>
-            </div>
+    <div class="sidebar" id="sidebar">
+        <div id="accLink" style="padding: 20px; cursor: pointer;">Comptes ▾</div>
+        <div id="authBox" class="auth-box">
+            <input type="email" id="email" placeholder="Email">
+            <input type="password" id="pass" placeholder="Mot de passe">
+            <button id="authBtn">Se connecter</button>
         </div>
     </div>
 
     <script>
-        particlesJS("particles-js", {
-            "particles": { "number": { "value": 80 }, "color": { "value": ["#ffea00", "#ffffff"] }, "line_linked": { "enable": true, "color": "#ffea00" }, "move": { "enable": true, "speed": 2 } }
-        });
+        particlesJS("particles-js", { "particles": { "number": { "value": 80 }, "color": { "value": "#ffea00" }, "line_linked": { "enable": true, "color": "#ffea00" } } });
+        
+        // Navigation
+        document.getElementById('menuBtn').onclick = () => {
+            const s = document.getElementById('sidebar');
+            s.style.display = (s.style.display === 'block') ? 'none' : 'block';
+        };
+        document.getElementById('accLink').onclick = () => {
+            const a = document.getElementById('authBox');
+            a.style.display = (a.style.display === 'block') ? 'none' : 'block';
+        };
     </script>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 
-        const app = initializeApp({ /* Ton config Firebase ici */ });
+        // --- REMPLACE CETTE PARTIE AVEC TES INFOS FIREBASE ---
+        const firebaseConfig = {
+            apiKey: "...", 
+            authDomain: "...",
+            projectId: "...",
+            storageBucket: "...",
+            messagingSenderId: "...",
+            appId: "..."
+        };
+        // -----------------------------------------------------
+
+        const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
 
-        // UI Logic
-        document.getElementById('menuBtn').onclick = () => { 
-            const s = document.getElementById('sidebar');
-            s.style.display = s.style.display === 'block' ? 'none' : 'block'; 
-        };
-        
-        document.getElementById('accountMenu').onclick = () => {
-            const a = document.getElementById('authSection');
-            a.style.display = a.style.display === 'block' ? 'none' : 'block';
-        };
-
-        // Bouton Connexion
-        document.getElementById('mainBtn').onclick = async () => {
+        document.getElementById('authBtn').onclick = () => {
             const email = document.getElementById('email').value;
-            const pass = document.getElementById('password').value;
-            try {
-                await signInWithEmailAndPassword(auth, email, pass);
-                alert("Connecté !");
-            } catch (e) { alert(e.message); }
+            const pass = document.getElementById('pass').value;
+            signInWithEmailAndPassword(auth, email, pass)
+                .then(() => alert("Connecté !"))
+                .catch(err => alert(err.message));
         };
     </script>
 </body>
