@@ -3,18 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mon Site Snapchat</title>
+    <title>SS06</title>
     <style>
-        /* Réinitialisation de base */
+        /* Réinitialisation */
         body, html {
             margin: 0;
             padding: 0;
             height: 100%;
             width: 100%;
             overflow: hidden;
+            font-family: 'Arial', sans-serif;
         }
 
-        /* Configuration du fond animé */
+        /* Arrière-plan animé type Snapchat */
         body {
             background: linear-gradient(45deg, #FFFC00, #FFFFFF, #FFFC00);
             background-size: 400% 400%;
@@ -22,20 +23,38 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            font-family: sans-serif;
         }
 
-        /* L'animation qui fait bouger les couleurs */
+        /* Nom SS06 positionné en haut à gauche */
+        .brand {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #000;
+            background: rgba(255, 255, 255, 0.5);
+            padding: 10px 20px;
+            border-radius: 50px;
+            animation: pulse 2s infinite;
+        }
+
+        /* Animations */
         @keyframes gradientAnimation {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
     </style>
 </head>
 <body>
 
-    <h1>Bienvenue</h1>
+    <div class="brand">SS06</div>
 
 </body>
 </html>
