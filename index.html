@@ -8,24 +8,25 @@
         body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', sans-serif; background: #0a0a0a; color: white; }
         
         /* Menu Hamburger en haut à droite */
-        .menu-btn { position: absolute; top: 20px; right: 20px; cursor: pointer; font-size: 24px; z-index: 1001; }
+        .menu-btn { position: fixed; top: 20px; right: 20px; cursor: pointer; font-size: 28px; z-index: 1001; }
         
         /* Menu latéral */
         .sidebar {
-            display: none; position: absolute; top: 0; right: 0; width: 250px; height: 100%;
-            background: #1a1a1a; padding: 60px 20px; z-index: 1000; box-shadow: -5px 0 15px rgba(0,0,0,0.5);
+            display: none; position: fixed; top: 0; right: 0; width: 280px; height: 100%;
+            background: #1a1a1a; padding: 80px 20px; z-index: 1000; box-shadow: -5px 0 15px rgba(0,0,0,0.5);
+            border-left: 1px solid #333;
         }
         
-        /* Formulaire intégré dans le menu */
-        .auth-section { display: none; margin-top: 20px; border-top: 1px solid #333; padding-top: 20px; }
+        /* Formulaire */
+        .auth-section { display: none; margin-top: 15px; border: 1px solid #333; padding: 15px; border-radius: 10px; background: #000; }
+        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #444; border-radius: 8px; background: #111; color: white; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #e50914; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; color: white; margin-top: 10px; }
+        .nav-link { cursor: pointer; padding: 15px 0; font-size: 1.2rem; border-bottom: 1px solid #333; display: block; }
         
-        input { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #444; border-radius: 8px; background: #000; color: white; box-sizing: border-box; }
-        button { width: 100%; padding: 10px; background: #e50914; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; color: white; }
-        .nav-link { cursor: pointer; padding: 10px 0; display: block; border-bottom: 1px solid #333; }
-
+        /* Boutique */
         .container { max-width: 800px; margin: 0 auto; padding: 100px 20px; text-align: center; }
-        .product-card { background: #111; padding: 20px; border-radius: 20px; border: 1px solid #333; }
-        .btn-cart { background: #8b0000; padding: 15px; width: 100%; border: none; border-radius: 10px; color: white; font-weight: bold; margin-top: 10px; }
+        .product-card { background: #111; padding: 30px; border-radius: 20px; border: 1px solid #333; }
+        .btn-cart { background: #8b0000; padding: 15px; width: 100%; border: none; border-radius: 10px; color: white; font-weight: bold; margin-top: 20px; }
     </style>
 </head>
 <body>
@@ -42,7 +43,7 @@
             <input type="email" id="email" placeholder="Email">
             <input type="password" id="password" placeholder="Mot de passe">
             <button id="mainBtn">Se connecter</button>
-            <div id="toggleBtn" style="font-size: 0.7rem; margin-top:10px; cursor:pointer; color:#aaa;">Pas de compte ? Créer un compte</div>
+            <div id="toggleBtn" style="font-size: 0.75rem; margin-top:10px; cursor:pointer; color:#aaa; text-decoration:underline;">Pas de compte ? Créer un compte</div>
         </div>
     </div>
 
@@ -57,7 +58,16 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 
-        const firebaseConfig = { /* ... ton config Firebase ... */ };
+        const firebaseConfig = {
+            apiKey: "AIzaSyAiUzs4ymw1o82ayQ6ywWKZjYC7WXAT3aU",
+            authDomain: "site-ss06.firebaseapp.com",
+            projectId: "site-ss06",
+            storageBucket: "site-ss06.firebasestorage.app",
+            messagingSenderId: "473910979829",
+            appId: "1:473910979829:web:59ca78239e8527cb7e69bc",
+            measurementId: "G-RZD5CQ5H21"
+        };
+
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
 
@@ -70,17 +80,17 @@
         const toggleBtn = document.getElementById('toggleBtn');
         let isLogin = true;
 
-        // Ouvrir le menu latéral
+        // Événement pour ouvrir le menu
         menuBtn.addEventListener('click', () => {
-            sidebar.style.display = sidebar.style.display === 'block' ? 'none' : 'block';
+            sidebar.style.display = (sidebar.style.display === 'block') ? 'none' : 'block';
         });
 
-        // Dérouler le menu Comptes
+        // Événement pour dérouler "Comptes"
         accountMenu.addEventListener('click', () => {
-            authSection.style.display = authSection.style.display === 'block' ? 'none' : 'block';
+            authSection.style.display = (authSection.style.display === 'block') ? 'none' : 'block';
         });
 
-        // Basculer Connexion / Inscription
+        // Bascule Connexion / Inscription
         toggleBtn.addEventListener('click', () => {
             isLogin = !isLogin;
             document.getElementById('formTitle').innerText = isLogin ? "Connexion" : "Inscription";
@@ -92,10 +102,15 @@
         mainBtn.addEventListener('click', () => {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
+            
             if (isLogin) {
-                signInWithEmailAndPassword(auth, email, password).then(() => alert("Connecté !")).catch(e => alert(e.message));
+                signInWithEmailAndPassword(auth, email, password)
+                    .then(() => alert("Connecté avec succès !"))
+                    .catch(e => alert("Erreur : " + e.message));
             } else {
-                createUserWithEmailAndPassword(auth, email, password).then(() => alert("Compte créé !")).catch(e => alert(e.message));
+                createUserWithEmailAndPassword(auth, email, password)
+                    .then(() => alert("Compte créé avec succès !"))
+                    .catch(e => alert("Erreur : " + e.message));
             }
         });
     </script>
