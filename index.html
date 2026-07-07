@@ -3,43 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SS06</title>
+    <title>SS06 - Connexion</title>
     <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            width: 100%;
-            overflow: hidden;
-            font-family: 'Arial', sans-serif;
-        }
-
-        /* Arrière-plan animé */
+        body, html { margin: 0; padding: 0; height: 100%; font-family: sans-serif; overflow: hidden; }
+        
+        /* Fond animé */
         body {
             background: linear-gradient(45deg, #FFFC00, #FFFFFF, #FFFC00);
             background-size: 400% 400%;
             animation: gradientAnimation 10s ease infinite;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
 
-        /* Nom SS06 avec dégradé animé */
+        /* Titre SS06 */
         .brand {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            font-size: 3rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            
-            /* Appliquer le même dégradé que le fond */
-            background: linear-gradient(45deg, #FFFFFF, #000000, #FFFFFF);
-            background-size: 400% 400%;
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            
-            /* Animation synchronisée */
-            animation: gradientAnimation 10s ease infinite;
+            position: absolute; top: 20px; left: 20px; font-size: 2rem; font-weight: 900;
+            background: linear-gradient(45deg, #000, #444); -webkit-background-clip: text; color: transparent;
         }
+
+        /* Formulaire */
+        .card {
+            background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            width: 300px; text-align: center;
+        }
+        input { width: 100%; padding: 10px; margin: 10px 0; border: 2px solid #eee; border-radius: 10px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background: #FFFC00; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
+        .toggle-link { margin-top: 15px; font-size: 0.8rem; color: #555; cursor: pointer; text-decoration: underline; }
 
         @keyframes gradientAnimation {
             0% { background-position: 0% 50%; }
@@ -51,6 +40,28 @@
 <body>
 
     <div class="brand">SS06</div>
+
+    <div class="card">
+        <h2 id="formTitle">Connexion</h2>
+        <input type="email" placeholder="Email">
+        <input type="password" placeholder="Mot de passe">
+        <button id="mainBtn">Se connecter</button>
+        <div class="toggle-link" onclick="toggleForm()">Pas de compte ? Créer un compte</div>
+    </div>
+
+    <script>
+        function toggleForm() {
+            const title = document.getElementById('formTitle');
+            const btn = document.getElementById('mainBtn');
+            if (title.innerText === "Connexion") {
+                title.innerText = "Inscription";
+                btn.innerText = "Créer le compte";
+            } else {
+                title.innerText = "Connexion";
+                btn.innerText = "Se connecter";
+            }
+        }
+    </script>
 
 </body>
 </html>
