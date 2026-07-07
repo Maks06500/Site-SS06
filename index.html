@@ -3,48 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SS06 - Connexion</title>
+    <title>SS06 - Site Principal</title>
     <style>
-        body, html { margin: 0; padding: 0; height: 100%; font-family: sans-serif; overflow: hidden; }
+        /* Design de base du site */
+        body, html { margin: 0; padding: 0; height: 100%; font-family: sans-serif; background: #f4f4f4; }
         
-        body {
-            background: linear-gradient(45deg, #FFFC00, #FFFFFF, #FFFC00);
-            background-size: 400% 400%;
-            animation: gradientAnimation 10s ease infinite;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        /* Onglet flottant en haut à gauche */
+        .tab-container {
+            position: absolute; top: 10px; left: 10px; z-index: 1000;
+            background: white; padding: 15px; border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 250px;
         }
 
-        .brand {
-            position: absolute; top: 20px; left: 20px; font-size: 3rem; font-weight: 900;
-            text-transform: uppercase;
-            background: linear-gradient(45deg, #000, #444);
-            -webkit-background-clip: text; color: transparent;
-        }
+        input { width: 100%; padding: 8px; margin: 5px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
+        button { width: 100%; padding: 8px; background: #FFFC00; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        .toggle-link { margin-top: 10px; font-size: 0.75rem; color: #555; cursor: pointer; text-decoration: underline; }
 
-        .card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 300px; text-align: center; }
-        input { width: 100%; padding: 10px; margin: 10px 0; border: 2px solid #eee; border-radius: 10px; box-sizing: border-box; }
-        button { width: 100%; padding: 10px; background: #FFFC00; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        button:hover { background: #e6e300; }
-        .toggle-link { margin-top: 15px; font-size: 0.8rem; color: #555; cursor: pointer; text-decoration: underline; }
-
-        /* Animation de disparition */
+        /* Animation de bienvenue au centre de la page */
         #homePage { 
-            display: none; 
-            text-align: center; 
-            color: #000; 
-            opacity: 1; 
-            transition: opacity 0.5s ease; 
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            display: none; text-align: center; background: white; padding: 40px; 
+            border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            opacity: 1; transition: opacity 0.5s ease;
         }
-
-        @keyframes gradientAnimation { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
     </style>
 </head>
 <body>
 
-    <div class="brand">SS06</div>
+    <div style="padding: 50px;">
+        <h1>Bienvenue sur le site SS06</h1>
+        <p>Ceci est le contenu principal de ton site.</p>
+    </div>
 
-    <div class="card" id="authCard">
-        <h2 id="formTitle">Connexion</h2>
+    <div class="tab-container" id="authCard">
+        <h4 id="formTitle" style="margin-top:0;">Connexion</h4>
         <input type="email" id="email" placeholder="Email">
         <input type="password" id="password" placeholder="Mot de passe">
         <input type="password" id="passwordConfirm" placeholder="Confirmer mot de passe" style="display:none;">
@@ -53,8 +45,8 @@
     </div>
 
     <div id="homePage">
-        <h1>Bienvenue sur SS06</h1>
-        <p>Tu es maintenant connecté.</p>
+        <h2>Connecté !</h2>
+        <p>Bienvenue sur SS06.</p>
     </div>
 
     <script type="module">
@@ -74,9 +66,9 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
 
+        // Éléments
         const authCard = document.getElementById('authCard');
         const homePage = document.getElementById('homePage');
-        const formTitle = document.getElementById('formTitle');
         const mainBtn = document.getElementById('mainBtn');
         const toggleBtn = document.getElementById('toggleBtn');
         const passConfirm = document.getElementById('passwordConfirm');
@@ -84,7 +76,7 @@
 
         toggleBtn.addEventListener('click', () => {
             isLogin = !isLogin;
-            formTitle.innerText = isLogin ? "Connexion" : "Inscription";
+            document.getElementById('formTitle').innerText = isLogin ? "Connexion" : "Inscription";
             mainBtn.innerText = isLogin ? "Se connecter" : "Créer le compte";
             toggleBtn.innerText = isLogin ? "Pas de compte ? Créer un compte" : "Déjà un compte ? Connexion";
             passConfirm.style.display = isLogin ? "none" : "block";
@@ -93,32 +85,20 @@
         function showHome() {
             authCard.style.display = "none";
             homePage.style.display = "block";
-            
-            // Attendre 3 secondes puis lancer l'animation de fondu
             setTimeout(() => {
                 homePage.style.opacity = "0";
-                setTimeout(() => {
-                    homePage.style.display = "none";
-                }, 500);
+                setTimeout(() => { homePage.style.display = "none"; }, 500);
             }, 3000);
         }
 
         mainBtn.addEventListener('click', () => {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-
             if (isLogin) {
-                signInWithEmailAndPassword(auth, email, password)
-                    .then(() => showHome())
-                    .catch(e => alert("Erreur : " + e.message));
+                signInWithEmailAndPassword(auth, email, password).then(showHome).catch(e => alert(e.message));
             } else {
-                if (password !== passConfirm.value) {
-                    alert("Les mots de passe ne correspondent pas !");
-                    return;
-                }
-                createUserWithEmailAndPassword(auth, email, password)
-                    .then(() => showHome())
-                    .catch(e => alert("Erreur : " + e.message));
+                if (password !== passConfirm.value) return alert("Les mots de passe ne correspondent pas !");
+                createUserWithEmailAndPassword(auth, email, password).then(showHome).catch(e => alert(e.message));
             }
         });
     </script>
