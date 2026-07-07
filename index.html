@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SS06 - Connexion</title>
     <style>
-        /* CSS : Design Snapchat */
         body, html { margin: 0; padding: 0; height: 100%; font-family: sans-serif; overflow: hidden; }
         
         body {
@@ -39,6 +38,8 @@
         <h2 id="formTitle">Connexion</h2>
         <input type="email" id="email" placeholder="Email">
         <input type="password" id="password" placeholder="Mot de passe">
+        <input type="password" id="passwordConfirm" placeholder="Confirmer mot de passe" style="display:none;">
+        
         <button id="mainBtn">Se connecter</button>
         <div class="toggle-link" id="toggleBtn">Pas de compte ? Créer un compte</div>
     </div>
@@ -47,7 +48,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 
-        // Ta configuration unique
         const firebaseConfig = {
             apiKey: "AIzaSyAiUzs4ymw1o82ayQ6ywWKZjYC7WXAT3aU",
             authDomain: "site-ss06.firebaseapp.com",
@@ -61,29 +61,34 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
 
-        // Gestion de l'interface
         let isLogin = true;
         const formTitle = document.getElementById('formTitle');
         const mainBtn = document.getElementById('mainBtn');
         const toggleBtn = document.getElementById('toggleBtn');
+        const passConfirm = document.getElementById('passwordConfirm');
 
         toggleBtn.addEventListener('click', () => {
             isLogin = !isLogin;
             formTitle.innerText = isLogin ? "Connexion" : "Inscription";
             mainBtn.innerText = isLogin ? "Se connecter" : "Créer le compte";
             toggleBtn.innerText = isLogin ? "Pas de compte ? Créer un compte" : "Déjà un compte ? Connexion";
+            passConfirm.style.display = isLogin ? "none" : "block";
         });
 
-        // Gestion de l'authentification
         mainBtn.addEventListener('click', () => {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
+            const confirm = passConfirm.value;
 
             if (isLogin) {
                 signInWithEmailAndPassword(auth, email, password)
                     .then(() => alert("Connecté avec succès !"))
                     .catch(e => alert("Erreur : " + e.message));
             } else {
+                if (password !== confirm) {
+                    alert("Erreur : Les mots de passe ne correspondent pas !");
+                    return;
+                }
                 createUserWithEmailAndPassword(auth, email, password)
                     .then(() => alert("Compte créé avec succès !"))
                     .catch(e => alert("Erreur : " + e.message));
