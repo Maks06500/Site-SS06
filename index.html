@@ -5,21 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SS06 - Site Principal</title>
     <style>
-        /* Design de base du site */
-        body, html { margin: 0; padding: 0; height: 100%; font-family: sans-serif; background: #f4f4f4; }
+        body, html { margin: 0; padding: 0; height: 100%; font-family: sans-serif; background: #fdfdfd; }
         
-        /* Onglet flottant en haut à gauche */
+        /* Onglet flottant en haut à DROITE */
         .tab-container {
-            position: absolute; top: 10px; left: 10px; z-index: 1000;
+            position: absolute; top: 10px; right: 10px; z-index: 1000;
             background: white; padding: 15px; border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 250px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15); width: 250px;
         }
 
-        input { width: 100%; padding: 8px; margin: 5px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
-        button { width: 100%; padding: 8px; background: #FFFC00; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; }
-        .toggle-link { margin-top: 10px; font-size: 0.75rem; color: #555; cursor: pointer; text-decoration: underline; }
+        input { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background: #FFFC00; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .toggle-link { margin-top: 10px; font-size: 0.8rem; color: #555; cursor: pointer; text-decoration: underline; }
 
-        /* Animation de bienvenue au centre de la page */
         #homePage { 
             position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
             display: none; text-align: center; background: white; padding: 40px; 
@@ -30,9 +28,9 @@
 </head>
 <body>
 
-    <div style="padding: 50px;">
-        <h1>Bienvenue sur le site SS06</h1>
-        <p>Ceci est le contenu principal de ton site.</p>
+    <div style="padding: 100px 50px;">
+        <h1>Bienvenue sur SS06</h1>
+        <p>Contenu principal du site...</p>
     </div>
 
     <div class="tab-container" id="authCard">
@@ -66,7 +64,6 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
 
-        // Éléments
         const authCard = document.getElementById('authCard');
         const homePage = document.getElementById('homePage');
         const mainBtn = document.getElementById('mainBtn');
