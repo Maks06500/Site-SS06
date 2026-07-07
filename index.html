@@ -2,52 +2,91 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SS06 - Connexion</title>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    
     <style>
-        /* ... (Mets ici ton CSS habituel pour le fond jaune/blanc) ... */
+        /* CSS : Design Snapchat */
+        body, html { margin: 0; padding: 0; height: 100%; font-family: sans-serif; overflow: hidden; }
+        
+        body {
+            background: linear-gradient(45deg, #FFFC00, #FFFFFF, #FFFC00);
+            background-size: 400% 400%;
+            animation: gradientAnimation 10s ease infinite;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+
+        .brand {
+            position: absolute; top: 20px; left: 20px; font-size: 3rem; font-weight: 900;
+            text-transform: uppercase;
+            background: linear-gradient(45deg, #000, #444);
+            -webkit-background-clip: text; color: transparent;
+        }
+
+        .card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 300px; text-align: center; }
+        input { width: 100%; padding: 10px; margin: 10px 0; border: 2px solid #eee; border-radius: 10px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background: #FFFC00; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #e6e300; }
+        .toggle-link { margin-top: 15px; font-size: 0.8rem; color: #555; cursor: pointer; text-decoration: underline; }
+
+        @keyframes gradientAnimation { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
     </style>
 </head>
 <body>
 
     <div class="brand">SS06</div>
+
     <div class="card">
         <h2 id="formTitle">Connexion</h2>
         <input type="email" id="email" placeholder="Email">
         <input type="password" id="password" placeholder="Mot de passe">
         <button id="mainBtn">Se connecter</button>
-        <p id="toggleBtn" style="cursor:pointer; color:blue;">Pas de compte ? S'inscrire</p>
+        <div class="toggle-link" id="toggleBtn">Pas de compte ? Créer un compte</div>
     </div>
 
-    <script>
-        // 2. Configuration (Remplace avec tes vraies données Firebase)
-        const firebaseConfig = {
-            apiKey: "TON_API_KEY",
-            authDomain: "TON_PROJET.firebaseapp.com",
-            projectId: "TON_PROJET"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 
-        // 3. Logique pour basculer entre Inscription et Connexion
+        // Ta configuration unique
+        const firebaseConfig = {
+            apiKey: "AIzaSyAiUzs4ymw1o82ayQ6ywWKZjYC7WXAT3aU",
+            authDomain: "site-ss06.firebaseapp.com",
+            projectId: "site-ss06",
+            storageBucket: "site-ss06.firebasestorage.app",
+            messagingSenderId: "473910979829",
+            appId: "1:473910979829:web:59ca78239e8527cb7e69bc",
+            measurementId: "G-RZD5CQ5H21"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Gestion de l'interface
         let isLogin = true;
-        document.getElementById('toggleBtn').addEventListener('click', () => {
+        const formTitle = document.getElementById('formTitle');
+        const mainBtn = document.getElementById('mainBtn');
+        const toggleBtn = document.getElementById('toggleBtn');
+
+        toggleBtn.addEventListener('click', () => {
             isLogin = !isLogin;
-            document.getElementById('formTitle').innerText = isLogin ? "Connexion" : "Inscription";
-            document.getElementById('mainBtn').innerText = isLogin ? "Se connecter" : "S'inscrire";
+            formTitle.innerText = isLogin ? "Connexion" : "Inscription";
+            mainBtn.innerText = isLogin ? "Se connecter" : "Créer le compte";
+            toggleBtn.innerText = isLogin ? "Pas de compte ? Créer un compte" : "Déjà un compte ? Connexion";
         });
 
-        // 4. Action au clic sur le bouton
-        document.getElementById('mainBtn').addEventListener('click', () => {
+        // Gestion de l'authentification
+        mainBtn.addEventListener('click', () => {
             const email = document.getElementById('email').value;
-            const pass = document.getElementById('password').value;
+            const password = document.getElementById('password').value;
 
             if (isLogin) {
-                auth.signInWithEmailAndPassword(email, pass).catch(e => alert(e.message));
+                signInWithEmailAndPassword(auth, email, password)
+                    .then(() => alert("Connecté avec succès !"))
+                    .catch(e => alert("Erreur : " + e.message));
             } else {
-                auth.createUserWithEmailAndPassword(email, pass).catch(e => alert(e.message));
+                createUserWithEmailAndPassword(auth, email, password)
+                    .then(() => alert("Compte créé avec succès !"))
+                    .catch(e => alert("Erreur : " + e.message));
             }
         });
     </script>
