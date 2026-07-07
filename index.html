@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SS06</title>
     <style>
-        /* Réinitialisation */
         body, html {
             margin: 0;
             padding: 0;
@@ -15,40 +14,37 @@
             font-family: 'Arial', sans-serif;
         }
 
-        /* Arrière-plan animé type Snapchat */
+        /* Arrière-plan animé */
         body {
             background: linear-gradient(45deg, #FFFC00, #FFFFFF, #FFFC00);
             background-size: 400% 400%;
             animation: gradientAnimation 10s ease infinite;
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
 
-        /* Nom SS06 positionné en haut à gauche */
+        /* Nom SS06 avec dégradé animé */
         .brand {
             position: absolute;
             top: 20px;
             left: 20px;
-            font-size: 2rem;
-            font-weight: bold;
-            color: #000;
-            background: rgba(255, 255, 255, 0.5);
-            padding: 10px 20px;
-            border-radius: 50px;
-            animation: pulse 2s infinite;
+            font-size: 3rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            
+            /* Appliquer le même dégradé que le fond */
+            background: linear-gradient(45deg, #FFFFFF, #000000, #FFFFFF);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            
+            /* Animation synchronisée */
+            animation: gradientAnimation 10s ease infinite;
         }
 
-        /* Animations */
         @keyframes gradientAnimation {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
         }
     </style>
 </head>
