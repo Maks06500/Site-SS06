@@ -27,7 +27,14 @@
         button:hover { background: #e6e300; }
         .toggle-link { margin-top: 15px; font-size: 0.8rem; color: #555; cursor: pointer; text-decoration: underline; }
 
-        #homePage { display: none; text-align: center; color: #000; padding: 20px; }
+        /* Animation de disparition */
+        #homePage { 
+            display: none; 
+            text-align: center; 
+            color: #000; 
+            opacity: 1; 
+            transition: opacity 0.5s ease; 
+        }
 
         @keyframes gradientAnimation { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
     </style>
@@ -87,8 +94,12 @@
             authCard.style.display = "none";
             homePage.style.display = "block";
             
+            // Attendre 3 secondes puis lancer l'animation de fondu
             setTimeout(() => {
-                homePage.style.display = "none";
+                homePage.style.opacity = "0";
+                setTimeout(() => {
+                    homePage.style.display = "none";
+                }, 500);
             }, 3000);
         }
 
