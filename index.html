@@ -7,10 +7,13 @@
     <style>
         body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', sans-serif; background: #0a0a0a; color: white; }
         
-        /* Onglet flottant en haut à DROITE */
-        .tab-container {
-            position: absolute; top: 10px; right: 10px; z-index: 1000;
-            background: #1a1a1a; padding: 15px; border-radius: 15px;
+        /* Menu Hamburger */
+        .menu-btn { position: absolute; top: 20px; left: 20px; cursor: pointer; font-size: 24px; z-index: 1001; }
+        
+        /* Conteneur Formulaire (Caché par défaut) */
+        .auth-overlay {
+            display: none; position: absolute; top: 60px; left: 20px; z-index: 1000;
+            background: #1a1a1a; padding: 20px; border-radius: 15px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.5); width: 250px; border: 1px solid #333;
         }
 
@@ -24,16 +27,14 @@
         .price { font-size: 1.5rem; color: #e50914; font-weight: bold; margin: 20px 0; }
         .btn-cart { background: #8b0000; padding: 15px; width: 100%; border: none; border-radius: 10px; color: white; font-weight: bold; margin-top: 10px; }
 
-        #homePage { 
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            display: none; text-align: center; background: #1a1a1a; padding: 40px; 
-            border-radius: 20px; opacity: 1; transition: opacity 0.5s ease;
-        }
+        #homePage { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); display: none; text-align: center; background: #1a1a1a; padding: 40px; border-radius: 20px; opacity: 1; transition: opacity 0.5s ease; }
     </style>
 </head>
 <body>
 
-    <div class="tab-container" id="authCard">
+    <div class="menu-btn" id="menuBtn">☰</div>
+
+    <div class="auth-overlay" id="authCard">
         <h4 id="formTitle" style="margin-top:0;">Connexion</h4>
         <input type="email" id="email" placeholder="Email">
         <input type="password" id="password" placeholder="Mot de passe">
@@ -45,22 +46,13 @@
     <div class="container">
         <div class="product-card">
             <h1>Nitro Boost 1 Month</h1>
-            <p>Accès Premium Discord - Livraison instantanée</p>
             <div class="price">€2.55</div>
-            
-            <div style="margin-bottom: 20px;">
-                <label>Quantité : </label>
-                <input type="number" value="1" style="width: 60px; text-align: center;">
-            </div>
-            
-            <button class="btn-cart">Add to Cart 🛒</button>
-            <button class="btn-cart" style="background: #e50914;">Buy Now ➡️</button>
+            <button class="btn-cart">Buy Now ➡️</button>
         </div>
     </div>
 
     <div id="homePage">
         <h2>Connecté !</h2>
-        <p>Bienvenue sur SS06.</p>
     </div>
 
     <script type="module">
@@ -80,12 +72,19 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
 
+        // Sélection
+        const menuBtn = document.getElementById('menuBtn');
         const authCard = document.getElementById('authCard');
         const homePage = document.getElementById('homePage');
         const mainBtn = document.getElementById('mainBtn');
         const toggleBtn = document.getElementById('toggleBtn');
         const passConfirm = document.getElementById('passwordConfirm');
         let isLogin = true;
+
+        // Afficher/Cacher le menu
+        menuBtn.addEventListener('click', () => {
+            authCard.style.display = authCard.style.display === 'block' ? 'none' : 'block';
+        });
 
         toggleBtn.addEventListener('click', () => {
             isLogin = !isLogin;
@@ -110,7 +109,7 @@
             if (isLogin) {
                 signInWithEmailAndPassword(auth, email, password).then(showHome).catch(e => alert(e.message));
             } else {
-                if (password !== passConfirm.value) return alert("Les mots de passe ne correspondent pas !");
+                if (password !== passConfirm.value) return alert("Mots de passe différents");
                 createUserWithEmailAndPassword(auth, email, password).then(showHome).catch(e => alert(e.message));
             }
         });
