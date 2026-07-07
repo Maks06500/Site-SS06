@@ -6,14 +6,10 @@
     <title>SS06 - Boutique</title>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <style>
-        /* Base et fond animé */
         body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', sans-serif; background-color: #0a0a0a; color: white; overflow-x: hidden; }
-        
         #particles-js { position: fixed; width: 100%; height: 100%; z-index: -1; top: 0; left: 0; background-color: #0a0a0a; }
-        
         .main-wrapper { position: relative; z-index: 1; min-height: 100vh; }
 
-        /* Nom SS06 avec animation dégradé */
         .site-name { 
             position: fixed; top: 20px; left: 20px; font-size: 24px; font-weight: bold; z-index: 1001;
             background: linear-gradient(90deg, #000000, #ffea00, #000000);
@@ -24,11 +20,9 @@
         }
         @keyframes gradient-flow { 0% { background-position: 0% center; } 100% { background-position: 200% center; } }
 
-        /* Menu */
         .menu-btn { position: fixed; top: 20px; right: 20px; cursor: pointer; font-size: 28px; z-index: 1001; }
         .sidebar { display: none; position: fixed; top: 0; right: 0; width: 280px; height: 100%; background: rgba(26, 26, 26, 0.95); padding: 80px 20px; z-index: 1000; box-shadow: -5px 0 15px rgba(0,0,0,0.5); }
         
-        /* Auth & Design */
         .auth-section { display: none; margin-top: 15px; border: 1px solid #333; padding: 15px; border-radius: 10px; background: #000; }
         input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #444; border-radius: 8px; background: #111; color: white; box-sizing: border-box; }
         button { width: 100%; padding: 12px; background: #e50914; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; color: white; margin-top: 10px; }
@@ -72,22 +66,12 @@
             "particles": {
                 "number": { "value": 80 },
                 "color": { "value": ["#ffffff", "#ffea00"] },
-                "shape": { "type": "circle" },
-                "opacity": { "value": 0.5 },
-                "size": { "value": 3 },
                 "line_linked": { "enable": true, "distance": 150, "color": "#ffea00", "opacity": 0.4 },
                 "move": { "enable": true, "speed": 2 }
             }
         });
-
-        // Logique UI
-        const menuBtn = document.getElementById('menuBtn');
-        const sidebar = document.getElementById('sidebar');
-        const accountMenu = document.getElementById('accountMenu');
-        const authSection = document.getElementById('authSection');
-
-        menuBtn.addEventListener('click', () => { sidebar.style.display = (sidebar.style.display === 'block') ? 'none' : 'block'; });
-        accountMenu.addEventListener('click', () => { authSection.style.display = (authSection.style.display === 'block') ? 'none' : 'block'; });
+        document.getElementById('menuBtn').addEventListener('click', () => { const s = document.getElementById('sidebar'); s.style.display = (s.style.display === 'block') ? 'none' : 'block'; });
+        document.getElementById('accountMenu').addEventListener('click', () => { const a = document.getElementById('authSection'); a.style.display = (a.style.display === 'block') ? 'none' : 'block'; });
     </script>
 
     <script type="module">
@@ -103,23 +87,21 @@
             appId: "1:473910979829:web:59ca78239e8527cb7e69bc",
             measurementId: "G-RZD5CQ5H21"
         };
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-
-        const mainBtn = document.getElementById('mainBtn');
-        const toggleBtn = document.getElementById('toggleBtn');
+        const auth = getAuth(initializeApp(firebaseConfig));
+        
         let isLogin = true;
-
-        toggleBtn.addEventListener('click', () => {
+        document.getElementById('toggleBtn').addEventListener('click', () => {
             isLogin = !isLogin;
             document.getElementById('formTitle').innerText = isLogin ? "Connexion" : "Inscription";
-            mainBtn.innerText = isLogin ? "Se connecter" : "Créer le compte";
+            document.getElementById('mainBtn').innerText = isLogin ? "Se connecter" : "Créer le compte";
+            document.getElementById('toggleBtn').innerText = isLogin ? "Pas de compte ? Créer un compte" : "Déjà un compte ? Connexion";
         });
-        mainBtn.addEventListener('click', () => {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            if (isLogin) { signInWithEmailAndPassword(auth, email, password).catch(e => alert(e.message)); }
-            else { createUserWithEmailAndPassword(auth, email, password).catch(e => alert(e.message)); }
+
+        document.getElementById('mainBtn').addEventListener('click', () => {
+            const e = document.getElementById('email').value;
+            const p = document.getElementById('password').value;
+            if(isLogin) { signInWithEmailAndPassword(auth, e, p).then(() => alert("Connecté!")).catch(err => alert(err.message)); }
+            else { createUserWithEmailAndPassword(auth, e, p).then(() => alert("Compte créé!")).catch(err => alert(err.message)); }
         });
     </script>
 </body>
