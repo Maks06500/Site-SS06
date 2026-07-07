@@ -4,40 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SS06 - Boutique</title>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <style>
-        body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', sans-serif; background: #0a0a0a; color: white; }
+        body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', sans-serif; background: #0a0a0a; color: white; overflow-x: hidden; }
         
-        /* Nom SS06 avec animation dégradé */
+        /* Fond animé (Particules) */
+        #particles-js { position: fixed; width: 100%; height: 100%; z-index: -1; top: 0; left: 0; }
+        
+        /* Nom SS06 avec animation dégradé rapide */
         .site-name { 
             position: fixed; top: 20px; left: 20px; font-size: 24px; font-weight: bold; z-index: 1001;
             background: linear-gradient(90deg, #000000, #ffea00, #000000);
             background-size: 200% auto;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: gradient-flow 1.5s linear infinite;
+            animation: gradient-flow 0.8s linear infinite; /* Très rapide */
         }
 
-        @keyframes gradient-flow {
-            0% { background-position: 0% center; }
-            100% { background-position: 200% center; }
-        }
+        @keyframes gradient-flow { 0% { background-position: 0% center; } 100% { background-position: 200% center; } }
 
         /* Menu Hamburger en haut à droite */
         .menu-btn { position: fixed; top: 20px; right: 20px; cursor: pointer; font-size: 28px; z-index: 1001; }
         
-        /* Menu latéral */
-        .sidebar {
-            display: none; position: fixed; top: 0; right: 0; width: 280px; height: 100%;
-            background: #1a1a1a; padding: 80px 20px; z-index: 1000; box-shadow: -5px 0 15px rgba(0,0,0,0.5);
-        }
-        
-        /* Formulaire */
+        /* Sidebar et reste du design... */
+        .sidebar { display: none; position: fixed; top: 0; right: 0; width: 280px; height: 100%; background: #1a1a1a; padding: 80px 20px; z-index: 1000; box-shadow: -5px 0 15px rgba(0,0,0,0.5); }
         .auth-section { display: none; margin-top: 15px; border: 1px solid #333; padding: 15px; border-radius: 10px; background: #000; }
         input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #444; border-radius: 8px; background: #111; color: white; box-sizing: border-box; }
         button { width: 100%; padding: 12px; background: #e50914; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; color: white; margin-top: 10px; }
         .nav-link { cursor: pointer; padding: 15px 0; font-size: 1.2rem; border-bottom: 1px solid #333; display: block; }
-        
-        /* Boutique */
         .container { max-width: 800px; margin: 0 auto; padding: 100px 20px; text-align: center; }
         .product-card { background: #111; padding: 30px; border-radius: 20px; border: 1px solid #333; }
         .btn-cart { background: #8b0000; padding: 15px; width: 100%; border: none; border-radius: 10px; color: white; font-weight: bold; margin-top: 20px; }
@@ -45,6 +39,7 @@
 </head>
 <body>
 
+    <div id="particles-js"></div>
     <div class="site-name">SS06</div>
     <div class="menu-btn" id="menuBtn">☰</div>
 
@@ -52,7 +47,6 @@
         <div class="nav-link">Home</div>
         <div class="nav-link">Products</div>
         <div class="nav-link" id="accountMenu">Comptes ▾</div>
-        
         <div class="auth-section" id="authSection">
             <h4 id="formTitle">Connexion</h4>
             <input type="email" id="email" placeholder="Email">
@@ -69,11 +63,25 @@
         </div>
     </div>
 
+    <script>
+        // Configuration des particules (Noir et Jaune)
+        particlesJS("particles-js", {
+            "particles": {
+                "number": { "value": 80 },
+                "color": { "value": ["#ffffff", "#ffea00"] },
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.5 },
+                "size": { "value": 3 },
+                "line_linked": { "enable": true, "distance": 150, "color": "#ffea00", "opacity": 0.4 },
+                "move": { "enable": true, "speed": 2 }
+            }
+        });
+    </script>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 
-        // Ton code JS reste identique, je garde la logique pour ne pas casser ton authentification
         const firebaseConfig = {
             apiKey: "AIzaSyAiUzs4ymw1o82ayQ6ywWKZjYC7WXAT3aU",
             authDomain: "site-ss06.firebaseapp.com",
@@ -83,7 +91,6 @@
             appId: "1:473910979829:web:59ca78239e8527cb7e69bc",
             measurementId: "G-RZD5CQ5H21"
         };
-
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
 
@@ -103,15 +110,11 @@
             mainBtn.innerText = isLogin ? "Se connecter" : "Créer le compte";
             toggleBtn.innerText = isLogin ? "Pas de compte ? Créer un compte" : "Déjà un compte ? Connexion";
         });
-
         mainBtn.addEventListener('click', () => {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            if (isLogin) {
-                signInWithEmailAndPassword(auth, email, password).catch(e => alert(e.message));
-            } else {
-                createUserWithEmailAndPassword(auth, email, password).catch(e => alert(e.message));
-            }
+            if (isLogin) { signInWithEmailAndPassword(auth, email, password).catch(e => alert(e.message)); }
+            else { createUserWithEmailAndPassword(auth, email, password).catch(e => alert(e.message)); }
         });
     </script>
 </body>
